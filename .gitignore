@@ -24,6 +24,8 @@ build/*.map
 docs.json
 __dummy.html
 docs/
+dub.selections.json
+dub.settings.json
 
 # Code coverage
 *.lst

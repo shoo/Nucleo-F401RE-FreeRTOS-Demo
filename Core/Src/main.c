@@ -71,6 +71,11 @@ void StartDefaultTask(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+extern void D_main(void);
+__weak int _getpid(){ return -1;}
+__weak int _getpid_r(){ return -1;}
+__weak int _kill(int pid, int sig){ return -1; }
+__weak int _kill_r(int pid, int sig){ return -1; }
 
 /* USER CODE END 0 */
 
@@ -345,9 +350,8 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-    HAL_IWDG_Refresh(&hiwdg);
-    osDelay(500);
+    D_main();
+    osDelay(1);
   }
   /* USER CODE END 5 */
 }

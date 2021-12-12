@@ -1,0 +1,28 @@
+{
+	"name": "nucleo-f401re-app",
+	"importPaths": ["."],
+	"stringImportPaths": ["res"],
+	"targetPath": "build",
+	"postGenerateCommands-arm": [
+		"${LD} -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 build/Nucleo-F401RE-FreeRTOS.a ${BUILD_DIR}/lib${TARGET}.a -specs=nano.specs -T${LDSCRIPT} -Wl,--start-group -lc -lm -lnosys -Wl,--end-group -Wl,-Map=build/${TARGET}.map,--cref -Wl,--gc-sections -o ${TARGET}.elf",
+		"${SZ} ${TARGET}.elf",
+		"${HEX} -O ihex ${TARGET}.elf ${TARGET}.hex",
+		"${BIN} -O binary -S ${TARGET}.elf ${TARGET}.bin"
+	],
+	"buildOptions-arm": ["betterC"],
+	"dflags-arm-ldc": [
+		"--float-abi=hard",
+		"-mcpu=cortex-m4",
+		"-relocation-model=static",
+		"-disable-linker-strip-dead",
+		"-output-s", "-output-o", "--static"
+	],
+	"buildTypes": {
+		"debug": {
+			"buildOptions-ldc": ["debugMode", "debugInfoC"],
+			"dflags-ldc": ["--gdwarf", "--dwarf-version=2"]
+		}
+	},
+	"targetName": "application",
+	"targetType": "library"
+}

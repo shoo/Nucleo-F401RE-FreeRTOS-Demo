@@ -88,11 +88,13 @@ CC = $(GCC_PATH)/$(PREFIX)gcc
 AS = $(GCC_PATH)/$(PREFIX)gcc -x assembler-with-cpp
 CP = $(GCC_PATH)/$(PREFIX)objcopy
 SZ = $(GCC_PATH)/$(PREFIX)size
+AR = $(GCC_PATH)/$(PREFIX)ar
 else
 CC = $(PREFIX)gcc
 AS = $(PREFIX)gcc -x assembler-with-cpp
 CP = $(PREFIX)objcopy
 SZ = $(PREFIX)size
+AR = $(PREFIX)ar
 endif
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
@@ -169,7 +171,7 @@ LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BU
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
-
+lib: $(BUILD_DIR)/$(TARGET).a
 
 #######################################
 # build the application
@@ -190,6 +192,10 @@ $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(LD) $(OBJECTS) $(LDFLAGS) -o $@
 	$(SZ) $@
+
+$(BUILD_DIR)/$(TARGET).a: $(OBJECTS) Makefile
+	$(CC) -r -nodefaultlibs -o $(BUILD_DIR)/$(TARGET).o $(OBJECTS)
+	$(AR) crs $(BUILD_DIR)/$(TARGET).a $(BUILD_DIR)/$(TARGET).o
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
