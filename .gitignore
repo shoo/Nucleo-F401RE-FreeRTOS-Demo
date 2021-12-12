@@ -1,6 +1,8 @@
 # Compiled Object files
 *.o
 *.obj
+build/*.d
+build/*.map
 
 # Compiled Dynamic libraries
 *.so
@@ -13,6 +15,9 @@
 
 # Executables
 *.exe
+*.elf
+*.hex
+*.bin
 
 # DUB
 .dub
