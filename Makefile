@@ -96,6 +96,7 @@ SZ = $(PREFIX)size
 endif
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
+MKDIR = mkdir
  
 #######################################
 # CFLAGS
@@ -191,10 +192,10 @@ $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
 	
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@	
+	$(BIN) $< $@
 	
 $(BUILD_DIR):
-	mkdir $@		
+	$(MKDIR) $@
 
 #######################################
 # clean up
