@@ -345,7 +345,9 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+    HAL_IWDG_Refresh(&hiwdg);
+    osDelay(500);
   }
   /* USER CODE END 5 */
 }
