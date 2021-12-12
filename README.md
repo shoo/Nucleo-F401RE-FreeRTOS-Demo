@@ -12,7 +12,13 @@ make
 
 
 ```bat
-C:\msys64\mingw64\bin\mingw32-make.exe all GCC_PATH=C:/gcc-arm-none-eabi/bin MKDIR="cmd /C mkdir"
+C:\msys64\mingw64\bin\mingw32-make.exe all GCC_PATH=C:/gcc-arm-none-eabi/bin "MKDIR=cmd /C mkdir"
+```
+
+clangでビルドする場合は以下。
+
+```bat
+C:\msys64\mingw64\bin\mingw32-make.exe all -j 8 "CC=C:/llvm/bin/clang.exe --sysroot=C:/gcc-arm-none-eabi/arm-none-eabi --target=arm-none-eabi -fshort-enums" "AS=C:/llvm/bin/clang.exe --sysroot=C:/gcc-arm-none-eabi/arm-none-eabi --target=arm-none-eabi -fshort-enums -x assembler-with-cpp" "LD=C:/gcc-arm-none-eabi/bin/arm-none-eabi-gcc.exe" "CP=C:/llvm/bin/llvm-objcopy.exe" "SZ=C:/llvm/bin/llvm-size.exe" "ASMOPTS=" "MKDIR=cmd /C mkdir"
 ```
 
 
