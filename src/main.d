@@ -33,11 +33,18 @@ enum LD2_Pin = GPIO_PIN_5;
 // CMSIS
 extern (C) uint osDelay(uint) @system;
 
+// stdc
+extern(C) int printf(const char* fmt, ...);
+extern(C) int puts(const char* fmt);
+
+
 // 500msごとにコールバックされる
 extern (C) void onLEDTim500ms(TimerHandle_t xTimer) @trusted
 {
+	__gshared static int x = 0;
 	// Lチカ
 	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+	printf("Hello! %d\n", x++);
 }
 
 extern (C) void D_main() @trusted
@@ -55,4 +62,26 @@ extern (C) void D_main() @trusted
 		// タスクスイッチする
 		osDelay(1);
 	}
+}
+
+
+extern (C) void SendSemihostCommand(int command, void* message) @trusted
+{
+	version(LDC)
+	{
+		import ldc.llvmasm;
+		__asm("mov r0, $0; mov r1, $1; bkpt #0xAB", "r,r,~{r0},~{r1}", command, message);
+	}
+	else static assert(0);
+}
+
+extern (C) int _write_r(void* ptr, int fd, const char* buf, uint cnt)
+{
+	uint[3] message = [
+		1,
+		cast(uint)buf,
+		cnt
+	];
+	SendSemihostCommand(0x05, &message[0]);
+	return cnt;
 }
